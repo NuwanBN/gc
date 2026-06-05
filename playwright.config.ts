@@ -3,9 +3,7 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-if (!process.env.BASE_URL) {
-  throw new Error('Missing BASE_URL in environment (.env).');
-}
+const BASE_URL = process.env.BASE_URL || 'https://grubcenter.staging.grubtech.io/';
 
 export default defineConfig({
   testDir: './features',
@@ -25,7 +23,7 @@ export default defineConfig({
       ],
 
   use: {
-    baseURL: process.env.BASE_URL,
+    baseURL: BASE_URL,
     trace: 'on',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
