@@ -1,0 +1,12 @@
+{
+  "LoginPage": {
+    "file_path": "src/gui/pages/LoginPage.ts",
+    "fixture_key": "loginPage",
+    "url_path": "/login"
+  },
+  "MenuManagementPage": {
+    "file_path": "src/gui/pages/MenuManagementPage.ts",
+    "fixture_key": "menuManagementPage",
+    "url_path": "/"
+  }
+}

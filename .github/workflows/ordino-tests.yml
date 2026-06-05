@@ -1,0 +1,140 @@
+name: ordino playwright tests
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+    inputs:
+      shardCount:
+        description: "Number of parallel machines"
+        required: false
+        default: "2"
+
+permissions:
+  contents: read
+  actions: write
+  checks: write
+
+jobs:
+  setup:
+    name: Prepare matrix
+    runs-on: ubuntu-latest
+    outputs:
+      shardIndex: ${{ steps.gen.outputs.shardIndex }}
+      shardTotal: ${{ steps.gen.outputs.shardTotal }}
+    steps:
+      - name: Generate shard matrix
+        id: gen
+        run: |
+          TOTAL=${{ inputs.shardCount || vars.SHARD_COUNT || '2' }}
+          echo "shardTotal=$TOTAL" >> $GITHUB_OUTPUT
+          INDICES=$(python3 -c "import json; print(json.dumps(list(range(1, int($TOTAL)+1))))")
+          echo "shardIndex=$INDICES" >> $GITHUB_OUTPUT
+
+  run-tests:
+    name: Shard ${{ matrix.shardIndex }} / ${{ needs.setup.outputs.shardTotal }}
+    needs: setup
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        shardIndex: ${{ fromJSON(needs.setup.outputs.shardIndex) }}
+    env:
+      BASE_URL: ${{ vars.BASE_URL }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: "package-lock.json"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install chromium --with-deps
+
+      - name: Run tests (shard ${{ matrix.shardIndex }}/${{ needs.setup.outputs.shardTotal }})
+        run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ needs.setup.outputs.shardTotal }}
+
+      - name: Upload blob report
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: blob-report-${{ matrix.shardIndex }}
+          path: blob-report/
+          retention-days: 7
+
+  merge-reports:
+    name: Merge & Publish Reports
+    needs: [setup, run-tests]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: "package-lock.json"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download blob reports
+        uses: actions/download-artifact@v6
+        with:
+          pattern: blob-report-*
+          path: all-blob-reports
+          merge-multiple: true
+
+      - name: Merge reports
+        run: |
+          mkdir -p test-results
+          npx playwright merge-reports --reporter=html,json,junit ./all-blob-reports
+        env:
+          PLAYWRIGHT_JSON_OUTPUT_NAME: test-results/results.json
+          PLAYWRIGHT_JUNIT_OUTPUT_NAME: test-results/results.xml
+
+      - name: Publish test results (JUnit)
+        if: always()
+        uses: dorny/test-reporter@v3
+        with:
+          name: playwright test results
+          path: test-results/results.xml
+          reporter: java-junit
+          fail-on-error: false
+
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: playwright-html-report
+          path: playwright-report/
+          retention-days: 14
+
+      - name: Upload JSON report
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: playwright-report-json
+          path: test-results/results.json
+
+      - name: Upload full test-results report
+        uses: actions/upload-artifact@v6
+        if: always()
+        with:
+          name: playwright-report
+          path: test-results/

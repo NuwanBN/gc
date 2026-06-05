@@ -1,0 +1,74 @@
+{
+  "/login#textbox:email": {
+    "strategy": "id",
+    "selector": "#email",
+    "role": "textbox",
+    "name": "email",
+    "ref_count": 1,
+    "last_validated": "2026-06-02T00:00:00Z",
+    "validation_count": 1
+  },
+  "/login#textbox:password": {
+    "strategy": "id",
+    "selector": "#password",
+    "role": "textbox",
+    "name": "password",
+    "ref_count": 1,
+    "last_validated": "2026-06-02T00:00:00Z",
+    "validation_count": 1
+  },
+  "/login#button:login": {
+    "strategy": "id",
+    "selector": "#login",
+    "role": "button",
+    "name": "Login",
+    "ref_count": 1,
+    "last_validated": "2026-06-02T00:00:00Z",
+    "validation_count": 1
+  },
+  "/login#alert:login-error": {
+    "strategy": "id",
+    "selector": "#login-error",
+    "role": "alert",
+    "name": "login-error",
+    "ref_count": 1,
+    "last_validated": "2026-06-02T00:00:00Z",
+    "validation_count": 1
+  },
+  "/#link:Dashboard": {
+    "strategy": "role",
+    "selector": "getByRole('link', { name: 'Dashboard' })",
+    "role": "link",
+    "name": "Dashboard",
+    "ref_count": 1,
+    "last_validated": "2026-06-02T00:00:00Z",
+    "validation_count": 1
+  },
+  "/#button:Menu Management GC3": {
+    "strategy": "role",
+    "selector": "getByRole('button', { name: 'Menu Management GC3' })",
+    "role": "button",
+    "name": "Menu Management GC3",
+    "ref_count": 1,
+    "last_validated": "2026-06-03T00:00:00Z",
+    "validation_count": 1
+  },
+  "/#link:Products": {
+    "strategy": "role",
+    "selector": "getByRole('link', { name: 'Products' })",
+    "role": "link",
+    "name": "Products",
+    "ref_count": 1,
+    "last_validated": "2026-06-03T00:00:00Z",
+    "validation_count": 1
+  },
+  "/#link:Modifier Groups": {
+    "strategy": "role",
+    "selector": "getByRole('link', { name: 'Modifier Groups' })",
+    "role": "link",
+    "name": "Modifier Groups",
+    "ref_count": 1,
+    "last_validated": "2026-06-03T00:00:00Z",
+    "validation_count": 1
+  }
+}
