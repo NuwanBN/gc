@@ -45,6 +45,7 @@ jobs:
     env:
       BASE_URL: ${{ vars.BASE_URL }}
       WORKERS: ${{ vars.WORKERS || '1' }}
+      RETRIES: ${{ vars.RETRIES || '2' }}
       TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
       TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
 

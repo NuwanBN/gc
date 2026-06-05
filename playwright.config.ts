@@ -10,7 +10,7 @@ export const PASSWORD = process.env.TEST_PASSWORD || 'Test@123';
 export default defineConfig({
   testDir: './features',
   fullyParallel: true,
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? parseInt(process.env.RETRIES || '2', 10) : 0,
   workers: process.env.CI ? parseInt(process.env.WORKERS || '1', 10) : undefined,
   outputDir: './test-results/runs',
   preserveOutput: 'failures-only',
