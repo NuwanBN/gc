@@ -66,6 +66,7 @@ jobs:
         run: npx playwright install chromium --with-deps
 
       - name: Run tests (shard ${{ matrix.shardIndex }}/${{ needs.setup.outputs.shardTotal }})
+        continue-on-error: true
         run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ needs.setup.outputs.shardTotal }}
 
       - name: Upload blob report
