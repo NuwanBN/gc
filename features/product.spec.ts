@@ -2,9 +2,7 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../src/gui/pages/LoginPage';
 import { MenuManagementPage } from '../src/gui/pages/MenuManagementPage';
-
-const VALID_EMAIL = 'kexeda3953@pazuric.com';
-const VALID_PASSWORD = 'Test@123';
+import { USERNAME, PASSWORD } from '../playwright.config';
 
 test.describe('Product Navigation', () => {
   // scenario: Happy Path
@@ -13,7 +11,7 @@ test.describe('Product Navigation', () => {
     const menuManagementPage = new MenuManagementPage(page);
 
     await loginPage.goto();
-    await loginPage.step_login(VALID_EMAIL, VALID_PASSWORD);
+    await loginPage.step_login(USERNAME, PASSWORD);
 
     await expect(page.getByRole('link', { name: 'Dashboard' })).toBeVisible();
     await menuManagementPage.step_openProducts();

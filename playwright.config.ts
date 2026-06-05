@@ -4,6 +4,8 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 const BASE_URL = process.env.BASE_URL || 'https://grubcenter.staging.grubtech.io/';
+export const USERNAME = process.env.TEST_USERNAME || 'kexeda3953@pazuric.com';
+export const PASSWORD = process.env.TEST_PASSWORD || 'Test@123';
 
 export default defineConfig({
   testDir: './features',
