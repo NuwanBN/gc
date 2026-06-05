@@ -44,6 +44,7 @@ jobs:
         shardIndex: ${{ fromJSON(needs.setup.outputs.shardIndex) }}
     env:
       BASE_URL: ${{ vars.BASE_URL }}
+      WORKERS: ${{ vars.WORKERS || '1' }}
 
     steps:
       - name: Checkout repository
