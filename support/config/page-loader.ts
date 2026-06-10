@@ -1,5 +1,5 @@
 // ── Page Objects ─────────────────────────────────────────────
-export { LoginPage } from '../gui/pages/LoginPage';
+export { LoginPage } from '../../pages/LoginPage';
 
 // ── Panels ───────────────────────────────────────────────────
 

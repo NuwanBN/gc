@@ -1,6 +1,6 @@
 // spec: ordino/specs/login.story.md
 import { test, expect } from '@playwright/test';
-import { LoginPage } from '../src/gui/pages/LoginPage';
+import { LoginPage } from '../pages/LoginPage';
 import { USERNAME, PASSWORD } from '../playwright.config';
 
 test.describe('Login', () => {

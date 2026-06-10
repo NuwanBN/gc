@@ -1,8 +1,10 @@
 // spec: ordino/specs/product-creation.story.md
 import { test, expect } from '@playwright/test';
-import { LoginPage } from '../src/gui/pages/LoginPage';
-import { ProductCreationPage } from '../src/gui/pages/ProductCreationPage';
-import { USERNAME, PASSWORD } from '../playwright.config';
+import { LoginPage } from '../pages/LoginPage';
+import { ProductCreationPage } from '../pages/ProductCreationPage';
+
+const VALID_EMAIL = 'kexeda3953@pazuric.com';
+const VALID_PASSWORD = 'Test@123';
 
 function uniqueProductName(prefix: string): string {
   return `${prefix}-${Date.now()}`;
@@ -19,7 +21,7 @@ test.describe('Product Creation', () => {
     const productName = uniqueProductName('autoprod-ac1');
 
     await loginPage.goto();
-    await loginPage.step_login(USERNAME, PASSWORD);
+    await loginPage.step_login(VALID_EMAIL, VALID_PASSWORD);
     await expect(page.getByRole('link', { name: 'Dashboard' })).toBeVisible();
 
     await productCreationPage.gotoProducts();
@@ -39,7 +41,7 @@ test.describe('Product Creation', () => {
     const productName = uniqueProductName('autoprod-ac2');
 
     await loginPage.goto();
-    await loginPage.step_login(USERNAME, PASSWORD);
+    await loginPage.step_login(VALID_EMAIL, VALID_PASSWORD);
     await expect(page.getByRole('link', { name: 'Dashboard' })).toBeVisible();
 
     await productCreationPage.gotoProducts();

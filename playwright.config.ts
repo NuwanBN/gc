@@ -8,7 +8,7 @@ export const USERNAME = process.env.TEST_USERNAME || 'kexeda3953@pazuric.com';
 export const PASSWORD = process.env.TEST_PASSWORD || 'Test@123';
 
 export default defineConfig({
-  testDir: './features',
+  testDir: './tests',
   fullyParallel: true,
   retries: process.env.CI ? parseInt(process.env.RETRIES || '2', 10) : 0,
   workers: process.env.CI ? parseInt(process.env.WORKERS || '1', 10) : undefined,

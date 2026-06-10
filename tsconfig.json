@@ -12,13 +12,12 @@
     "types": ["node", "@playwright/test"],
     "baseUrl": ".",
     "paths": {
-      "@pages/*":  ["src/gui/pages/*"],
-      "@panels/*": ["src/gui/panels/*"],
-      "@config/*": ["src/config/*"],
-      "@gui/*":    ["src/gui/*"],
-      "@src/*":    ["src/*"]
+      "@pages/*":   ["pages/*"],
+      "@panels/*":  ["panels/*"],
+      "@config/*":  ["support/config/*"],
+      "@data/*":    ["support/data/*"]
     }
   },
-  "include": ["src/**/*", "features/**/*", "playwright.config.ts"],
+  "include": ["tests/**/*", "pages/**/*", "panels/**/*", "support/**/*", "playwright.config.ts"],
   "exclude": ["node_modules"]
 }

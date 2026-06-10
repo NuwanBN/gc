@@ -1,7 +1,7 @@
 // spec: ordino/specs/product.story.md
 import { test, expect } from '@playwright/test';
-import { LoginPage } from '../src/gui/pages/LoginPage';
-import { MenuManagementPage } from '../src/gui/pages/MenuManagementPage';
+import { LoginPage } from '../pages/LoginPage';
+import { MenuManagementPage } from '../pages/MenuManagementPage';
 import { USERNAME, PASSWORD } from '../playwright.config';
 
 test.describe('Product Navigation', () => {
