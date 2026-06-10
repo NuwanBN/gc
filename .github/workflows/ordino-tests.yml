@@ -6,11 +6,6 @@ on:
   pull_request:
     branches: ["main"]
   workflow_dispatch:
-    inputs:
-      shardCount:
-        description: "Number of parallel machines"
-        required: false
-        default: "2"
 
 permissions:
   contents: read
@@ -18,34 +13,18 @@ permissions:
   checks: write
 
 jobs:
-  setup:
-    name: Prepare matrix
-    runs-on: ubuntu-latest
-    outputs:
-      shardIndex: ${{ steps.gen.outputs.shardIndex }}
-      shardTotal: ${{ steps.gen.outputs.shardTotal }}
-    steps:
-      - name: Generate shard matrix
-        id: gen
-        run: |
-          TOTAL=${{ inputs.shardCount || vars.SHARD_COUNT || '2' }}
-          echo "shardTotal=$TOTAL" >> $GITHUB_OUTPUT
-          INDICES=$(python3 -c "import json; print(json.dumps(list(range(1, int($TOTAL)+1))))")
-          echo "shardIndex=$INDICES" >> $GITHUB_OUTPUT
-
   run-tests:
-    name: Shard ${{ matrix.shardIndex }} / ${{ needs.setup.outputs.shardTotal }}
-    needs: setup
+    name: Shard ${{ matrix.shardIndex }} / 2
     runs-on: ubuntu-latest
     timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
-        shardIndex: ${{ fromJSON(needs.setup.outputs.shardIndex) }}
+        shardIndex: [1, 2]
     env:
       BASE_URL: ${{ vars.BASE_URL }}
       WORKERS: ${{ vars.WORKERS || '1' }}
-      RETRIES: ${{ vars.RETRIES || '2' }}
+      RETRIES: ${{ vars.RETRIES || '1' }}
       TEST_USERNAME: ${{ secrets.TEST_USERNAME }}
       TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
 
@@ -68,7 +47,7 @@ jobs:
 
       - name: Run tests (shard ${{ matrix.shardIndex }}/${{ needs.setup.outputs.shardTotal }})
         continue-on-error: true
-        run: npx playwright test --shard=${{ matrix.shardIndex }}/${{ needs.setup.outputs.shardTotal }}
+        run: npx playwright test --shard=${{ matrix.shardIndex }}/2
 
       - name: Upload blob report
         uses: actions/upload-artifact@v6
@@ -80,7 +59,7 @@ jobs:
 
   merge-reports:
     name: Merge & Publish Reports
-    needs: [setup, run-tests]
+    needs: [run-tests]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 10
